@@ -1,0 +1,66 @@
+/* 5-1,5-2,5-3,5-4,5-5 */
+select to_char(hire_date,'yyyy') 입사년도 ,count(*)인원수
+from emplyoees
+group by to_char(hire_date,'yyyy');
+
+
+
+select substr(period, 5,2) 월별 , region 지역별, sum(loan_jan_amt)잔액
+from kor_loan_status
+where period like '2012%'
+group by period, substr(period, 5,2) ,region
+order by period , region;
+
+
+
+select period, gubun, sum(loan_jan_amt) totl_jan
+from kor_loan_status
+where period like '2013%'
+group by gubun, period
+
+union all
+
+select period, null gubun, sum(loan_jan_amt) totl_jan
+from kor_loan_status
+where period like '2013%'
+group by period,null 
+order by period,gubun asc;
+
+
+select period, SUM(loan_jan_amt) 주택담보대출액, 0 기타대출액
+    from kor_loan_status
+    where period = '201311'
+    and gubun = '주택담보대출' 
+     GROUP BY period, gubun, 0 
+    
+    union all
+    
+select period, 0 주택담보대출액, SUM(loan_jan_amt) 기타대출액
+    from kor_loan_status
+    where period = '201311'
+    and gubun = '기타대출'
+     GROUP BY period, gubun, 0 ;
+
+
+SELECT REGION, 
+       SUM(AMT1) AS "201111", 
+       SUM(AMT2) AS "201112", 
+       SUM(AMT3) AS "201210", 
+       SUM(AMT4) AS "201211", 
+       SUM(AMT5) AS "201312", 
+       SUM(AMT6) AS "201310",
+       SUM(AMT6) AS "201311"
+  FROM ( 
+         SELECT REGION,
+                CASE WHEN PERIOD = '201111' THEN LOAN_JAN_AMT ELSE 0 END AMT1,
+                CASE WHEN PERIOD = '201112' THEN LOAN_JAN_AMT ELSE 0 END AMT2,
+                CASE WHEN PERIOD = '201210' THEN LOAN_JAN_AMT ELSE 0 END AMT3, 
+                CASE WHEN PERIOD = '201211' THEN LOAN_JAN_AMT ELSE 0 END AMT4, 
+                CASE WHEN PERIOD = '201212' THEN LOAN_JAN_AMT ELSE 0 END AMT5, 
+                CASE WHEN PERIOD = '201310' THEN LOAN_JAN_AMT ELSE 0 END AMT6,
+                CASE WHEN PERIOD = '201311' THEN LOAN_JAN_AMT ELSE 0 END AMT7
+         FROM KOR_LOAN_STATUS
+       )
+GROUP BY REGION
+ORDER BY REGION       
+;

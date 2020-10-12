@@ -1,0 +1,121 @@
+set SERVEROUTPUT on;
+
+create or replace type emp_info is object(
+emp_id number(6,0),
+emp_name varchar2(80));
+
+create or replace type emp_nt is table of emp_info;
+
+create table dept_tbl{
+ dept_id  number(6,0),
+ dept_name varchar2(80),
+ emp_list emp_nt)
+ 
+ 
+ nested table emp_list store as emp_list_nt;
+ 
+ 
+-------------------------------------------------------
+
+
+ create or replace procedure dept_ins_proc ( a number )
+ is
+ cursor dept_cur is
+    select a.department_id, a.department_name,b.employee_id,b.emp_name 
+    from departments a, employees b
+    where a.department_id = a and a.department_id = b.department_id;
+    va_dept_cur  dept_cur%rowtype;
+    va_emp_nt emp_nt := emp_nt();
+ begin
+  open dept_cur;
+    loop
+    fetch dept_cur into va_dept_cur;
+    exit when dept_cur%notfound;
+            va_emp_nt.extend;
+            va_emp_nt(va_emp_nt.last) := emp_info(va_dept_cur.employee_id, va_dept_cur.emp_name);
+        end loop;
+        insert into dept_tbl
+        values (va_dept_cur.department_id, va_dept_cur.department_name, va_emp_nt);
+ end;
+ 
+ 
+ exec dept_ins_proc(50);
+ select * from dept_tbl;
+
+
+-------------------------------------------------------
+
+
+create or replace procedure dept_sel_proc ( a in DEPARTMENTS.DEPARTMENT_ID%TYPE)
+is
+    va_dept  dept_tbl%rowtype;
+begin
+     select dept_id, dept_name, emp_list
+     into va_dept
+     from dept_tbl
+     where dept_id = a ;
+    
+     DBMS_OUTPUT.PUT_LINE('부서이름 : ' || va_dept.dept_name);
+     DBMS_OUTPUT.PUT_LINE('---------------------------------'); 
+     
+     for i in va_dept.emp_list.first..va_dept.emp_list.last
+        loop
+            DBMS_OUTPUT.PUT_LINE('사원번호 : ' || va_dept.emp_list(i).emp_id || ' 사원이름 : ' ||va_dept.emp_list(i).emp_name);
+        end loop;
+end;
+ 
+exec dept_sel_proc(50);
+
+
+-------------------------------------------------------
+
+
+create or replace procedure dept_emp_add
+(
+dept_num in departments.department_id%type,
+a number,
+b varchar2
+)
+is
+begin
+    insert into table(select emp_list from dept_tbl where dept_id =dept_num)
+    values (a, b);
+end;
+
+exec dept_emp_add(50,200,'리오넬 메시');
+exec dept_sel_proc(50);
+
+
+-------------------------------------------------------
+
+create or replace procedure dept_emp_drop
+(
+dept_num in departments.department_id%type,
+a number
+)
+is
+begin
+    delete from table(select emp_list from dept_tbl where dept_id =dept_num)t
+    where t.emp_id = a;
+end;
+
+exec dept_emp_drop(50,200);
+exec dept_sel_proc(50);
+
+-------------------------------------------------------
+
+create or replace procedure dept_emp_update
+(
+dept_num in departments.department_id%type,
+a number,
+b varchar2
+)
+is
+begin
+    update table(select emp_list from dept_tbl where dept_id = dept_num) t
+    set t.emp_name = b
+    where t.emp_id = a;
+end;
+
+exec dept_emp_update(50,197,'크리스티아누 호날두');
+exec dept_sel_proc(50);

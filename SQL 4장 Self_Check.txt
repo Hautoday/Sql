@@ -1,0 +1,63 @@
+
+    
+select lpad(substr(phone_number,5,8),12,'(02)')
+    from employees
+    where length(phone_number) = 12;
+    
+create table sc4_2
+(
+employee_id number,
+emp_name varchar2(100),
+hire_date date,
+year_of_service number
+);
+
+insert into sc4_2
+select employee_id ,emp_name , hire_date, trunc((sysdate-hire_date)365)
+    from empoyees
+    where trunc((sysdate-hire_date)365) =10;
+    
+select 
+    from sc4_2
+    order by year_or_service_dese;
+        
+select replace (cust_main_phone_number,'-','')
+    from customers;
+        
+select translate (cust_main_phone_number,'1234567890-','asdfghjk')
+as trans_name
+from customers;
+select abs(10),abs(-10),abs(-10.123)
+        FROM DUAL;
+
+create table sc_4_5
+(
+cust_name varchar2(100),
+ages varchar2(10)
+);
+insert into sc4_5
+select cust_name,
+decode(trunc((extract(year from stsdate ) - (cust_year_of_birth)+1),-1),30,'30대',40,'40대',50,'50대','기타')
+
+    from customers;
+select  
+    from sc4_5
+    where rawnum15;
+    
+create table sc4_6
+(
+cust_name varchar2(100),
+ages varchar2(10)
+);
+insert into sc4_6
+select cust_name,
+case when (extract(year from stsdate ) - (cust_year_of_birth)+1)20 then '10대'
+     when (extract(year from stsdate ) - (cust_year_of_birth)+1)= 20 and  (extract(year from stsdate ) - (cust_year_of_birth)+1) 30 then '20대'
+     when (extract(year from stsdate ) - (cust_year_of_birth)+1)= 30 and  (extract(year from stsdate ) - (cust_year_of_birth)+1) 40 then '30대'
+     when (extract(year from stsdate ) - (cust_year_of_birth)+1)= 40 and  (extract(year from stsdate ) - (cust_year_of_birth)+1) 50 then '40대'
+    end ages
+    from customers;
+
+select  
+    from sc4_6
+    where rawnum15;

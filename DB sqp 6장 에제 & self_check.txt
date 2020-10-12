@@ -1,0 +1,120 @@
+-- join은 a와 b의 테이블에서 공통된 값을 추출하는것  ( 두 컬럼값이 같은 행을 추출 )
+select a.employee_id , a.emp_name, a.department_id, b.department_name
+from employees a , departments b
+where a.department_id = b.department_id;
+
+--semi-join 테이블 b 에 존재하는 a의 데이터를 추출하는 조인, 
+--조인의 사용방법은 두가지가 있다
+--semi-join 예제중 exists 를 사용한 예제 
+
+select department_id,department_name
+from departments a
+where exists (select *
+                  from employees b 
+                  where a.department_id = b.department_id
+                  and b.salary > 3000)
+order by department_name;
+
+--semi-join 중 in 을 사용한 방법의 예제
+select department_id , department_name
+from departments a
+where department_id in ( select b.department_id
+                            from employees b
+                            where b.salary > 3000)
+order by department_name;
+
+
+select a.department_id,  a.department_name
+from departments a, employees b
+where a.department_id = b.department_id
+and b.salary > 3000
+order by a.department_name;
+
+--anti-join 서브쿼리 b 테이블에는 없는 메인쿼리 a 테이블의 데이터만 추출하는 방법
+--사용방법은 not in or not exists 중 하나를 사용한다
+--즉 anti-join 은 semi_join 과 반대의 개념이다
+
+select a.employee_id, a.emp_name, a.department_id, b.department_name
+from employees a, departments b
+where a.department_id = b.department_id --a와 b의 공통된값을 찾음
+and a.department_id not in ( select department_id
+                              from departments
+                              where manager_id is null);
+-- 설명하자면 anti-join은 b 셀럼 department_id 에서 null인 값을 찾고 
+-- 그 값을 위에있는 a.departmant_id 에서 not in 즉 a.department에서  
+-- 값이 manager_id null이 아닌 부분만 출력하도록 한 코드 
+
+-- 결론적으로 anti와 semi 는 서로 상반되며 
+-- semi는 공통의 값을 anti는 서로 다른값을 찾아 출력하는 명령어
+
+select count(*)
+from employees a
+where not exists ( select 1
+                  from departments c
+                  where a.department_id = c.department_id
+                  and manager_id is null);
+
+--self-join 은 서로다른 두 테이블이 아닌 동일한 한 테이블을 사용해 조인하는 방법
+select a.employee_id, a.emp_name, b.employee_id, b.emp_name, a.department_id
+from employees a, employees b
+where a.employee_id < b.employee_id
+and a.department_id = b.department_id
+and a.department_id = 20;
+                         
+                         
+select a.department_id, a.department_name, b.job_id, b.department_id
+from departments a, job_history b
+where a.department_id = b.department_id;
+
+
+--outer join 일반 조인을 확장한 개념, 데이터를 모두 조인한다.
+--1. 일반조인
+
+select a.department_id, a.department_name, b.job_id, b.department_id
+from departments a, job_history b
+where a.department_id = b.department_id;
+
+--2. 외부조인 값이 없거나 null 이여도 모든값의 데이터를 조인한다.
+select a.department_id, a.department_name, b.job_id, b.department_id
+from departments a, job_history b
+where a.department_id = b.department_id(+) ;
+
+select a.employee_id, a.emp_name, b.job_id, b.department_id
+from employees a , job_history b
+where a.employee_id = b.employee_id(+)
+and a.department_id = b.department_id;
+
+select a.employee_id, a.emp_name, b.job_id, b.department_id
+from employees a , job_history b
+where a.employee_id = b.employee_id(+)
+and a.department_id = b.department_id(+);
+
+
+--카타시안 조인 예제
+select a.employee_id, a.emp_name, b.department_id, b.department_name
+from employees a, departments b;
+
+
+--ansi조인 (내부조인)
+--기존문법
+select a.employee_id, a.emp_name, b.department_id, b.department_name
+from employees a , departments b
+where a.department_id = b.department_id
+and a.hire_date >= to_date ('2003-01-01','yyyy-mm-dd');
+
+--ansi 문법 
+select a.employee_id, a.emp_name, b.department_id, b.department_name
+from employees a
+inner join departments b on ( a.department_id = b.department_id )
+where a.hire_date >= to_date('2003-01-01','yyyy-mm-dd');
+
+
+select a.employee_id, a.emp_name, b.job_id ,b.start_date , b.end_date, c.department_name
+from employees a , job_history b , departments c
+where a.employee_id = '101';
+
+selecta. a.employee_id, a.emp_name,b.job_id,b.department_id
+from employees a , job_history b
+wherea.employee_id = b.employee_id(+)
+anda.department_id(+) = b.department_id;
+
