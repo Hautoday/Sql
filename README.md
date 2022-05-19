@@ -23,12 +23,19 @@
 ## 2.  database의 table 만들기
 
 mysql> create table topic(
+
 -> number int(11) not null auto_increment,
+
 -> title varchar(100) not null,
+
 -> text text null,
+
 -> date datetime not null,
+
 -> username varchar(100) null,
+
 -> primary key(number)
+
 
 );
 
