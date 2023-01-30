@@ -15,8 +15,6 @@
 1. USE DATABASE NAME 생성된 데이터베이스를 선택하는 쿼리문 
 2. SHOW TABLES 란 생성된 TABLE을 확인할 수 있다. 
 
----
-
 ## 2.  database의 table 만들기
 
 mysql> create table topic(
@@ -38,8 +36,6 @@ mysql> create table topic(
 해당 table 컬럼생성은 보기 편하기 위하여 개행하여 작성하였지만,
 
 한줄로 써도 되며, 위와같이 보기 편하게 작성하여도 된다.
-
----
 
 ## 3.  기본적인 쿼리
 
@@ -81,8 +77,6 @@ delete * from topic;
 
 테스트를 하는것이라면 상관은 없지만 실무, 작업등 꼭 확인 후 실행하길 바랍니다. 
 
----
-
 ## 4. union
 
 비슷한 쿼리값을 하나의 쿼리로 묶을때 사용함.
@@ -99,8 +93,6 @@ from Products
 where store3 is NOT NULL;
 ```
 
----
-
 ## 5. sum case
 
 말 그대로 sum과 조건문인 case가 합쳐진 형태
@@ -115,5 +107,3 @@ from Products
 order by product_id desc;
 
 ```
-
----
