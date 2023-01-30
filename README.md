@@ -91,3 +91,37 @@ delete * from topic;
 말 그대로 삭제하는 쿼리문이며 위와같은 쿼리를 실행시킬 시 topic안에있는 모든 컬럼과 데이터를 삭제합니다. 
 
 테스트를 하는것이라면 상관은 없지만 실무, 작업등 꼭 확인 후 실행하길 바랍니다.
+## 4. union
+
+비슷한 쿼리값을 하나의 쿼리로 묶을때 사용함.
+
+```sql
+select product_id,( 'store2' ) as store , store2 as price
+from Products
+where store2 is NOT NULL
+
+union
+
+select product_id,( 'store3' ) as store , store3 as price
+from Products
+where store3 is NOT NULL;
+```
+
+---
+
+## 5. sum case
+
+말 그대로 sum과 조건문인 case가 합쳐진 형태
+
+```sql
+select product_id, sum( 
+case when store = 'buy'
+then -price
+else price
+end 
+from Products
+order by product_id desc;
+
+```
+
+---
