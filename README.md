@@ -1,8 +1,5 @@
----
-
 <aside>
-⚠️ 
-해당 정리는 데이터베이스를 처음 접하는 사람들을 위한 생성 및 사용방법으로서
+⚠️ 해당 정리는 데이터베이스를 처음 접하는 사람들을 위한 생성 및 사용방법으로서
 순서에 맞게 시작하면 됩니다.
 
 주의) 이 정리는 MySQL을 다운로드 받았다는 전제 조건하에 작성되었습니다.
@@ -23,19 +20,11 @@
 ## 2.  database의 table 만들기
 
 mysql> create table topic(
-
--> number int(11) not null auto_increment,
-
+-> number int(11) not null primary key,
 -> title varchar(100) not null,
-
 -> text text null,
-
 -> date datetime not null,
-
 -> username varchar(100) null,
-
--> primary key(number)
-
 
 );
 
@@ -90,7 +79,10 @@ delete * from topic;
 
 말 그대로 삭제하는 쿼리문이며 위와같은 쿼리를 실행시킬 시 topic안에있는 모든 컬럼과 데이터를 삭제합니다. 
 
-테스트를 하는것이라면 상관은 없지만 실무, 작업등 꼭 확인 후 실행하길 바랍니다.
+테스트를 하는것이라면 상관은 없지만 실무, 작업등 꼭 확인 후 실행하길 바랍니다. 
+
+---
+
 ## 4. union
 
 비슷한 쿼리값을 하나의 쿼리로 묶을때 사용함.
